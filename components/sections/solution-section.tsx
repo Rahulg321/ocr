@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function SolutionSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
+    // Set initial window width
+    setWindowWidth(window.innerWidth);
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -73,6 +77,7 @@ export default function SolutionSection() {
 
     // Redraw on resize
     const handleResize = () => {
+      setWindowWidth(window.innerWidth);
       drawConnections();
     };
 
@@ -84,42 +89,39 @@ export default function SolutionSection() {
   }, []);
 
   return (
-    <section className="relative w-full py-16 md:py-24 overflow-hidden bg-gradient-to-b from-white to-[#FFF5F9]">
+    <section className="relative w-full py-8 sm:py-12 md:py-16 lg:py-24 overflow-hidden bg-gradient-to-b from-white to-[#FFF5F9]">
       <div className="container mx-auto px-4 relative">
-        <h2 className="text-center text-3xl md:text-4xl font-bold text-gray-900 mb-16">
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 md:mb-16">
           Who Needs This Solution?
         </h2>
 
-        <div className="relative h-[400px] md:h-[450px]">
+        <div className="relative min-h-[20rem] sm:min-h-[25rem] md:min-h-[28rem]">
           {/* Canvas for drawing connections */}
           <canvas ref={canvasRef} className="absolute inset-0 z-0" />
 
           {/* Buttons */}
-          <div className="flex flex-wrap justify-center gap-4 relative z-10">
-            <button className="solution-button bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-full text-sm md:text-base shadow-sm transition-colors">
-              Business Analysts
-            </button>
-            <button className="solution-button bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-full text-sm md:text-base shadow-sm transition-colors">
-              Data Scientists
-            </button>
-            <button className="solution-button bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-full text-sm md:text-base shadow-sm transition-colors">
-              E-commerce Businesses
-            </button>
-            <button className="solution-button bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-full text-sm md:text-base shadow-sm transition-colors">
-              Healthcare & Finance
-            </button>
-            <button className="solution-button bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-full text-sm md:text-base shadow-sm transition-colors">
-              Marketing Teams
-            </button>
-            <button className="solution-button bg-gray-50 hover:bg-gray-100 text-gray-900 px-4 py-2 rounded-full text-sm md:text-base shadow-sm transition-colors">
-              Legal & Compliance
-            </button>
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 relative z-10">
+            {[
+              "Business Analysts",
+              "Data Scientists",
+              "E-commerce Businesses",
+              "Healthcare & Finance",
+              "Marketing Teams",
+              "Legal & Compliance",
+            ].map((text, index) => (
+              <button
+                key={index}
+                className="solution-button bg-gray-50 hover:bg-gray-100 text-gray-900 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm md:text-base shadow-sm transition-colors"
+              >
+                {text}
+              </button>
+            ))}
           </div>
 
           {/* Center circle */}
           <div className="absolute left-1/2 top-3/4 -translate-x-1/2 -translate-y-1/2 z-20">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#5E6BFF] shadow-lg flex items-center justify-center">
-              <div className="w-6 h-6 md:w-8 md:h-8 bg-white rounded-sm"></div>
+            <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full bg-[#5E6BFF] shadow-lg flex items-center justify-center">
+              <div className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 bg-white rounded-sm"></div>
             </div>
           </div>
         </div>
