@@ -22,6 +22,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import SignOutDialog from "./dialogs/SignOutDialog";
 
 const navigationItems = [
   {
@@ -43,6 +45,7 @@ const navigationItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <Sidebar className="border-r">
@@ -88,8 +91,8 @@ export function AppSidebar() {
                 <DropdownMenuItem>
                   <span>Billing</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
+                <DropdownMenuItem asChild>
+                  <SignOutDialog />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

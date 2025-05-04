@@ -1,17 +1,18 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "../globals.css";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import AuthLayoutImage from "@/public/auth-layout.png";
+import Image from "next/image";
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -24,17 +25,35 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${plusJakartaSans.variable} ${inter.variable} antialiased`}
       >
         <Card className="overflow-hidden min-h-screen">
           <CardContent className="grid p-0 md:grid-cols-2">
-            <div className="relative hidden bg-muted md:block h-screen">
-              <Button variant={"outline"}>Developer API coming soon🚀</Button>
-              <h1>Transform your Unstructured Data into Actionable Insights</h1>
-              <p>
-                Vision Language Model (VLM) powered structuring that simplifies
-                your data, saves time, and boosts efficiency.
-              </p>
+            <div className="relative hidden bg-[#F1F7FF] md:block h-screen">
+              <div className="block-space big-container">
+                <div className="flex justify-center">
+                  <Button variant={"outline"} className="">
+                    Developer API coming soon🚀
+                  </Button>
+                </div>
+                <h1 className="font-plus-jakarta-sans text-center mt-4">
+                  Transform your Unstructured Data into
+                  <span className="text-[#757CFF] ml-2">
+                    Actionable Insights
+                  </span>
+                </h1>
+                <p className="text-center">
+                  Vision Language Model (VLM) powered structuring that
+                  simplifies your data, saves time, and boosts efficiency.
+                </p>
+              </div>
+              <div className="pr-12 md:pr-16 lg:pr-24">
+                <img
+                  src={AuthLayoutImage.src}
+                  alt="Auth Layout Image"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
             {children}
           </CardContent>

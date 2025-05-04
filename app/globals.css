@@ -139,7 +139,11 @@
 }
 
 * {
-  font-family: var(--font-geist-sans);
+  font-family: var(--font-inter);
+}
+
+.font-plus-jakarta-sans {
+  font-family: var(--font-plus-jakarta-sans);
 }
 
 .parent-container {
