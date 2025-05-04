@@ -80,6 +80,11 @@ export function AppSidebar() {
                 <DropdownMenuItem>
                   <span>Account</span>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/notifications">
+                    <span>Notifications</span>
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <span>Billing</span>
                 </DropdownMenuItem>
