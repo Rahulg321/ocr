@@ -14,7 +14,6 @@ import FileUploadSection from "@/components/sections/file-upload-section";
 const HomePage = () => {
   return (
     <div>
-      <Header />
       <HeroSection />
       <FeaturesSection />
       <SolutionSection />
@@ -24,7 +23,6 @@ const HomePage = () => {
       <RealWorldSolutions />
       <ApiSection />
       <FileUploadSection />
-      <Footer />
     </div>
   );
 };
