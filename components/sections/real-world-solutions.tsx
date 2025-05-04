@@ -1,7 +1,106 @@
+"use client";
+
 import Image from "next/image";
-import { BarChart3 } from "lucide-react";
+import {
+  BarChart3,
+  Building2,
+  Truck,
+  BookOpen,
+  Target,
+  Brain,
+} from "lucide-react";
+import { useState } from "react";
+import type { ReactElement } from "react";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+
+interface IndustryContent {
+  title: string;
+  description: string;
+  icon: ReactElement;
+  features: string[];
+  imagePath: string;
+}
+
+const industryContents: Record<string, IndustryContent> = {
+  Finance: {
+    title: "Finance",
+    description:
+      "From static files to dynamic data. Turn dense financial docs into usable formats — automatically.",
+    icon: <BarChart3 className="text-white" size={20} />,
+    features: [
+      "Extract shipment details from bills of lading",
+      "Parse delivery receipts, barcodes, and handwritten notes",
+      "Capture signatures and timestamps effortlessly",
+    ],
+    imagePath: "/images/real-world-solutions.png",
+  },
+  Insurance: {
+    title: "Insurance",
+    description:
+      "Streamline claims processing and policy management with intelligent document processing.",
+    icon: <Building2 className="text-white" size={20} />,
+    features: [
+      "Automate claims form processing",
+      "Extract policy information accurately",
+      "Process medical records and reports",
+    ],
+    imagePath: "/images/real-world-solutions.png",
+  },
+  Logistics: {
+    title: "Logistics",
+    description:
+      "Optimize supply chain operations with automated document processing.",
+    icon: <Truck className="text-white" size={20} />,
+    features: [
+      "Process shipping manifests automatically",
+      "Extract tracking information",
+      "Digitize warehouse documentation",
+    ],
+    imagePath: "/images/real-world-solutions.png",
+  },
+  Research: {
+    title: "Research",
+    description:
+      "Transform research documents into structured, analyzable data.",
+    icon: <BookOpen className="text-white" size={20} />,
+    features: [
+      "Extract data from research papers",
+      "Process survey responses",
+      "Analyze academic documents",
+    ],
+    imagePath: "/images/real-world-solutions.png",
+  },
+  Marketing: {
+    title: "Marketing",
+    description:
+      "Convert marketing materials and analytics into actionable insights.",
+    icon: <Target className="text-white" size={20} />,
+    features: [
+      "Process campaign performance reports",
+      "Extract metrics from analytics documents",
+      "Digitize market research data",
+    ],
+    imagePath: "/images/real-world-solutions.png",
+  },
+  Knowledge: {
+    title: "Knowledge",
+    description:
+      "Transform unstructured knowledge into searchable, structured content.",
+    icon: <Brain className="text-white" size={20} />,
+    features: [
+      "Convert documentation into knowledge bases",
+      "Extract insights from technical papers",
+      "Process training materials",
+    ],
+    imagePath: "/images/real-world-solutions.png",
+  },
+};
 
 export default function RealWorldSolutions() {
+  const [selectedIndustry, setSelectedIndustry] = useState<string>("Finance");
+  const currentContent = industryContents[selectedIndustry];
+
   return (
     <section className="w-full py-16 px-4 max-w-7xl mx-auto">
       {/* Header Section */}
@@ -21,24 +120,21 @@ export default function RealWorldSolutions() {
 
       {/* Industry Categories */}
       <div className="flex flex-wrap justify-center gap-3 mb-12">
-        <button className="bg-indigo-500 text-white px-6 py-2 rounded-full text-sm font-medium">
-          Finance
-        </button>
-        <button className="bg-gray-100 text-gray-700 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors">
-          Insurance
-        </button>
-        <button className="bg-gray-100 text-gray-700 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors">
-          Logistics
-        </button>
-        <button className="bg-gray-100 text-gray-700 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors">
-          Research
-        </button>
-        <button className="bg-gray-100 text-gray-700 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors">
-          Marketing
-        </button>
-        <button className="bg-gray-100 text-gray-700 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors">
-          Knowledge
-        </button>
+        {Object.keys(industryContents).map((industry) => (
+          <Button
+            key={industry}
+            onClick={() => setSelectedIndustry(industry)}
+            variant="ghost" // Use a base variant that doesn't impose strong background/text colors
+            className={cn(
+              "rounded-full px-6 py-2 text-sm font-medium transition-colors cursor-pointer", // Base styles + reset height if needed
+              selectedIndustry === industry
+                ? "bg-indigo-500 text-white hover:bg-indigo-500/90" // Active state styles
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200" // Inactive state styles
+            )}
+          >
+            {industry}
+          </Button>
+        ))}
       </div>
 
       {/* Content Section */}
@@ -48,32 +144,19 @@ export default function RealWorldSolutions() {
           <div className="p-10 md:p-12 flex flex-col">
             <div className="flex flex-col">
               <div className="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center mb-6">
-                <BarChart3 className="text-white" size={20} />
+                {currentContent.icon}
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">Finance</h3>
-              <p className="text-gray-600 mb-8">
-                From static files to dynamic data. Turn dense financial docs
-                into usable formats — automatically.
-              </p>
+              <h3 className="text-2xl font-bold text-gray-800 mb-3">
+                {currentContent.title}
+              </h3>
+              <p className="text-gray-600 mb-8">{currentContent.description}</p>
               <ul className="space-y-4 mb-10">
-                <li className="flex items-start">
-                  <div className="min-w-[6px] h-[6px] rounded-full bg-black mt-2 mr-3"></div>
-                  <span className="text-gray-800">
-                    Extract shipment details from bills of lading
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <div className="min-w-[6px] h-[6px] rounded-full bg-black mt-2 mr-3"></div>
-                  <span className="text-gray-800">
-                    Parse delivery receipts, barcodes, and handwritten notes
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <div className="min-w-[6px] h-[6px] rounded-full bg-black mt-2 mr-3"></div>
-                  <span className="text-gray-800">
-                    Capture signatures and timestamps effortlessly
-                  </span>
-                </li>
+                {currentContent.features.map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <div className="min-w-[6px] h-[6px] rounded-full bg-black mt-2 mr-3"></div>
+                    <span className="text-gray-800">{feature}</span>
+                  </li>
+                ))}
               </ul>
               <div>
                 <button className="bg-indigo-500 text-white px-6 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-indigo-600 transition-colors">
@@ -108,8 +191,8 @@ export default function RealWorldSolutions() {
           {/* Right Image */}
           <div className="relative h-full min-h-[300px] md:min-h-[400px]">
             <Image
-              src="/images/real-world-solutions.png"
-              alt="Payment terminal with credit card"
+              src={currentContent.imagePath}
+              alt={`${currentContent.title} illustration`}
               fill
               className="object-cover"
               style={{

@@ -57,11 +57,6 @@ export default function PricingSection() {
 
   const faqQuestions = [
     {
-      question: "Why is Webflow the best nocode tool?",
-      answer:
-        "UI anim ad minim veniam quis nostrud exercitation ullamco labore nisi ut aliquip ex ea commodo consequat aute irure dolor.",
-    },
-    {
       question: "How to launch a Webflow website?",
       answer:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -180,7 +175,7 @@ export default function PricingSection() {
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             {faqQuestions.map((faq, index) => (
               <div
                 key={index}
