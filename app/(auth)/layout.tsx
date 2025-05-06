@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AuthLayoutImage from "@/public/auth-layout.png";
 import Image from "next/image";
+import { Toaster } from "@/components/ui/sonner";
+
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
@@ -56,6 +58,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
             {children}
+            <Toaster />
           </CardContent>
         </Card>
       </body>

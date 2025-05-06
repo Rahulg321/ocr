@@ -1,11 +1,10 @@
-import { SignupForm } from "@/components/forms/SignupForm";
 import React from "react";
-
+import SignupForm from "@/components/forms/SignupForm";
 const SignupPage = () => {
   return (
-    <div>
+    <section className="flex h-screen w-full items-center justify-center">
       <SignupForm />
-    </div>
+    </section>
   );
 };
 

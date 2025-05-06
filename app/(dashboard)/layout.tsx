@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "../globals.css";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { Toaster } from "@/components/ui/sonner";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
           <AppSidebar />
           <SidebarInset>{children}</SidebarInset>
         </SidebarProvider>
+        <Toaster />
       </body>
     </html>
   );
