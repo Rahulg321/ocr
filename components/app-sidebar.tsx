@@ -45,7 +45,6 @@ const navigationItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <Sidebar className="border-r">
@@ -55,10 +54,10 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarMenu>
           {navigationItems.map((item) => (
-            <SidebarMenuItem key={item.title}>
+            <SidebarMenuItem key={item.title} className="mb-2">
               <SidebarMenuButton asChild isActive={pathname === item.href}>
                 <Link href={item.href} className="flex items-center">
-                  <item.icon className="mr-2 h-5 w-5" />
+                  <item.icon className="mr-3 h-6 w-6" />
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>
@@ -72,8 +71,8 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
-                  <ChevronUp className="ml-auto" />
+                  <User2 className="h-6 w-6" /> Username
+                  <ChevronUp className="ml-auto h-5 w-5" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent

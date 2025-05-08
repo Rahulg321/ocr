@@ -2,7 +2,7 @@
 
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Bell } from "lucide-react";
+import { Bell, Play } from "lucide-react";
 
 interface HeaderProps {
   title: string;
@@ -39,8 +39,8 @@ export default function DashboardHeader({
           <span className="sr-only">Notifications</span>
         </Button>
         {showRunButton && (
-          <Button className="bg-gray-200 text-gray-700 hover:bg-gray-300">
-            Run <span className="ml-1">→</span>
+          <Button className="bg-figma-main text-white hover:bg-figma-main/80">
+            Run <Play />
           </Button>
         )}
       </div>

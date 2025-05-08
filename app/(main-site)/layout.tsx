@@ -5,6 +5,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
