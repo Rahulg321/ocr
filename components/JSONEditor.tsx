@@ -131,23 +131,25 @@ const JSONEditor: React.FC<JSONEditorProps> = ({
           <span className="text-sm">Valid JSON</span>
         </div>
       )}
-      <Textarea
-        value={value}
-        onChange={handleInputChange}
-        placeholder={placeholder}
-        style={{ fontSize: "1rem" }}
-        className={cn(
-          "w-full h-[25rem] font-sans bg-background border", // Replaced min/max height in px with fixed height in rem
-          "resize-y",
-          readOnly ? "opacity-50 cursor-not-allowed" : "",
-          isInvalidJSON
-            ? "border-red-500 focus:ring-red-500"
-            : "focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-          className
-        )}
-        readOnly={readOnly}
-        rows={8}
-      />
+      <div className="mt-4">
+        <Textarea
+          value={value}
+          onChange={handleInputChange}
+          placeholder={placeholder}
+          style={{ fontSize: "1rem" }}
+          className={cn(
+            "w-full h-[25rem] font-sans bg-background border", // Replaced min/max height in px with fixed height in rem
+            "resize-y",
+            readOnly ? "opacity-50 cursor-not-allowed" : "",
+            isInvalidJSON
+              ? "border-red-500 focus:ring-red-500"
+              : "focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+            className
+          )}
+          readOnly={readOnly}
+          rows={8}
+        />
+      </div>
     </div>
   );
 };
@@ -179,16 +181,18 @@ const JSONEditorPage = () => {
     <div className="mt-4 md:mt-6 lg:mt-8  border-2 border-gray-200 rounded-lg p-4">
       <div className="w-full">
         <h3>Schema Settings</h3>
-        <Select>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Load Sample Schema" />
-          </SelectTrigger>
-          <SelectContent className="w-full">
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="my-4">
+          <Select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Load Sample Schema" />
+            </SelectTrigger>
+            <SelectContent className="w-full">
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <JSONEditor
         value={jsonValue}

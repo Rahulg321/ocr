@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { FaImage } from "react-icons/fa6";
-
+import { useTransition } from "react";
 import {
   Upload,
   X,
@@ -22,6 +22,7 @@ import {
   BsFiletypeDocx,
   BsFileEarmarkExcelFill,
 } from "react-icons/bs";
+import UploadDocuments from "@/lib/actions/upload-documents";
 
 type UploadedFile = {
   id: string;
@@ -31,14 +32,23 @@ type UploadedFile = {
   url: string; // URL for preview if applicable
 };
 
-export function FileUpload() {
+interface FileUploadProps {
+  userId: string;
+}
+
+export function FileUpload({ userId }: FileUploadProps) {
   const [isDragging, setIsDragging] = React.useState(false);
-  const [uploadProgress, setUploadProgress] = React.useState<
-    Record<string, number>
-  >({});
-  const [uploadedFiles, setUploadedFiles] = React.useState<UploadedFile[]>([]);
+  const [uploadProgress, setUploadProgress] = React.useState<number>(0);
+  const [uploadedFile, setUploadedFile] = React.useState<UploadedFile | null>(
+    null
+  );
   const [isUploading, setIsUploading] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [isPending, startTransition] = useTransition();
+  const [uploadStatus, setUploadStatus] = React.useState<{
+    success?: string;
+    error?: string;
+  }>({});
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -54,7 +64,8 @@ export function FileUpload() {
     setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFiles(e.dataTransfer.files);
+      // Take only the first file
+      handleFile(e.dataTransfer.files[0]);
     }
   };
 
@@ -64,27 +75,19 @@ export function FileUpload() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      handleFiles(e.target.files);
+      // Take only the first file
+      handleFile(e.target.files[0]);
     }
   };
 
-  const handleFiles = (files: FileList) => {
+  const handleFile = (file: File) => {
+    // Reset state for new upload
     setIsUploading(true);
+    setUploadProgress(0);
+    setUploadStatus({});
 
-    Array.from(files).forEach((file) => {
-      const fileId = `file-${Date.now()}-${Math.random()
-        .toString(36)
-        .substr(2, 9)}`;
-
-      // Initialize progress for this file
-      setUploadProgress((prev) => ({
-        ...prev,
-        [fileId]: 0,
-      }));
-
-      // Simulate file upload with progress
-      simulateFileUpload(file, fileId);
-    });
+    // Upload the file
+    uploadFile(file);
 
     // Reset file input
     if (fileInputRef.current) {
@@ -92,56 +95,61 @@ export function FileUpload() {
     }
   };
 
-  const simulateFileUpload = (file: File, fileId: string) => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 10;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
+  const uploadFile = async (file: File) => {
+    try {
+      // Start progress
+      setUploadProgress(10);
 
-        // Create a URL for the file (for preview)
-        const fileUrl = URL.createObjectURL(file);
+      const blobName = `doc-${Date.now()}-${file.name}`;
+      const formData = new FormData();
 
-        // Add file to uploaded files list
-        setUploadedFiles((prev) => [
-          ...prev,
-          {
-            id: fileId,
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            url: fileUrl,
-          },
-        ]);
+      formData.append("file", file);
+      formData.append("fileName", blobName);
 
-        // Check if all files are uploaded
-        setUploadProgress((prev) => {
-          const updatedProgress = { ...prev, [fileId]: 100 };
-          const allCompleted = Object.values(updatedProgress).every(
-            (p) => p === 100
-          );
-          if (allCompleted) {
-            setIsUploading(false);
-          }
-          return updatedProgress;
+      // Update progress
+      setUploadProgress(30);
+
+      // Call API to upload file
+      const response = await UploadDocuments(formData, userId);
+
+      if (response.success) {
+        // Complete progress
+        setUploadProgress(100);
+
+        // Set the uploaded file
+        const fileId = `file-${Date.now()}`;
+        setUploadedFile({
+          id: fileId,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          url: response.imageUrl || URL.createObjectURL(file),
+        });
+
+        setUploadStatus({
+          success: `File uploaded successfully: ${file.name}`,
+          error: undefined,
         });
       } else {
-        setUploadProgress((prev) => ({
-          ...prev,
-          [fileId]: Math.round(progress),
-        }));
+        setUploadStatus({
+          error: response.message || "Server Side Error Occurred",
+          success: undefined,
+        });
       }
-    }, 200);
+    } catch (error) {
+      console.log("An error occurred while trying to upload file", error);
+      setUploadStatus({
+        error: "An error occurred, please try again later!!",
+        success: undefined,
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
-  const removeFile = (fileId: string) => {
-    setUploadedFiles((prev) => prev.filter((file) => file.id !== fileId));
-    setUploadProgress((prev) => {
-      const newProgress = { ...prev };
-      delete newProgress[fileId];
-      return newProgress;
-    });
+  const removeFile = () => {
+    setUploadedFile(null);
+    setUploadProgress(0);
   };
 
   const formatFileSize = (bytes: number): string => {
@@ -160,7 +168,7 @@ export function FileUpload() {
         className={cn(
           "border-2 border-dashed rounded-lg p-8 text-center transition-colors",
           isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300",
-          isUploading ? "opacity-75" : ""
+          isUploading ? "opacity-75 pointer-events-none" : ""
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -175,106 +183,109 @@ export function FileUpload() {
               Choose a file or drag & drop it here
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Supports 20+ formats including PDF, Word, Excel, PPT, image, html,
-              csv file.
+              Supports PDF, Word, Excel, PPT, image, and other document formats
             </p>
           </div>
           <Button
             variant="outline"
             className="mt-2 cursor-pointer"
             onClick={handleBrowseClick}
+            disabled={isUploading}
           >
             Browse File
           </Button>
           <input
             type="file"
-            multiple
             ref={fileInputRef}
             onChange={handleFileChange}
             className="hidden"
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.csv,.html,.txt"
           />
         </div>
       </div>
+
+      {/* Status Messages */}
+      {uploadStatus.success && (
+        <div className="bg-green-50 p-3 rounded-md border border-green-200 text-green-800">
+          {uploadStatus.success}
+        </div>
+      )}
+
+      {uploadStatus.error && (
+        <div className="bg-red-50 p-3 rounded-md border border-red-200 text-red-800">
+          {uploadStatus.error}
+        </div>
+      )}
 
       {/* Upload Progress Section */}
       {isUploading && (
         <div className="space-y-3">
           <h3 className="text-sm font-medium">Uploading...</h3>
-          {Object.entries(uploadProgress).map(
-            ([fileId, progress]) =>
-              progress < 100 && (
-                <div key={fileId} className="space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span>Uploading file...</span>
-                    <span>{progress}%</span>
-                  </div>
-                  <Progress value={progress} className="h-2" />
-                </div>
-              )
-          )}
+          <div className="space-y-1">
+            <div className="flex justify-between text-xs">
+              <span>Uploading file...</span>
+              <span>{uploadProgress}%</span>
+            </div>
+            <Progress value={uploadProgress} className="h-2" />
+          </div>
         </div>
       )}
 
-      {/* Uploaded Files List */}
-      {uploadedFiles.length > 0 && (
+      {/* Uploaded File */}
+      {uploadedFile && (
         <div className="space-y-3">
-          <h3 className="text-sm font-medium">Uploaded Files</h3>
+          <h3 className="text-sm font-medium">Uploaded File</h3>
           <div className="space-y-2">
-            {uploadedFiles.map((file) => (
-              <div
-                key={file.id}
-                className="flex items-center justify-between p-3 border rounded-md bg-gray-50"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-white rounded-md border">
-                    {file.type.includes("pdf") ? (
-                      <BsFiletypeDocx className="size-12 text-blue-500" />
-                    ) : file.type.includes("word") ||
-                      file.type.includes("doc") ? (
-                      <BsFiletypeDocx className="size-12 text-blue-500" />
-                    ) : file.type.includes("presentation") ||
-                      file.type.includes("powerpoint") ||
-                      file.type.includes("ppt") ? (
-                      <BsFiletypePptx className="size-12 text-orange-500" />
-                    ) : file.type.includes("spreadsheet") ||
-                      file.type.includes("excel") ||
-                      file.type.includes("xlsx") ||
-                      file.type.includes("xls") ? (
-                      <BsFileEarmarkExcelFill className="size-12 text-green-500" />
-                    ) : file.type.includes("png") ||
-                      file.type.includes("jpeg") ||
-                      file.type.includes("jpg") ? (
-                      <FaImage className="size-12 text-purple-500" />
-                    ) : file.type.includes("mp3") ||
-                      file.type.includes("wav") ||
-                      file.type.includes("audio") ? (
-                      <Music className="size-12 text-yellow-500" />
-                    ) : file.type.includes("mp4") ||
-                      file.type.includes("mov") ||
-                      file.type.includes("video") ? (
-                      <Video className="size-12 text-red-500" />
-                    ) : (
-                      <File className="size-12 text-blue-500" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium ">{file.name}</p>
-                    <p className="text-xs text-gray-500">
-                      {formatFileSize(file.size)}
-                    </p>
-                  </div>
+            <div className="flex items-center justify-between p-3 border rounded-md bg-gray-50">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-white rounded-md border">
+                  {uploadedFile.type.includes("pdf") ? (
+                    <BsFiletypeDocx className="size-12 text-blue-500" />
+                  ) : uploadedFile.type.includes("word") ||
+                    uploadedFile.type.includes("doc") ? (
+                    <BsFiletypeDocx className="size-12 text-blue-500" />
+                  ) : uploadedFile.type.includes("presentation") ||
+                    uploadedFile.type.includes("powerpoint") ||
+                    uploadedFile.type.includes("ppt") ? (
+                    <BsFiletypePptx className="size-12 text-orange-500" />
+                  ) : uploadedFile.type.includes("spreadsheet") ||
+                    uploadedFile.type.includes("excel") ||
+                    uploadedFile.type.includes("xlsx") ||
+                    uploadedFile.type.includes("xls") ? (
+                    <BsFileEarmarkExcelFill className="size-12 text-green-500" />
+                  ) : uploadedFile.type.includes("png") ||
+                    uploadedFile.type.includes("jpeg") ||
+                    uploadedFile.type.includes("jpg") ? (
+                    <FaImage className="size-12 text-purple-500" />
+                  ) : uploadedFile.type.includes("mp3") ||
+                    uploadedFile.type.includes("wav") ||
+                    uploadedFile.type.includes("audio") ? (
+                    <Music className="size-12 text-yellow-500" />
+                  ) : uploadedFile.type.includes("mp4") ||
+                    uploadedFile.type.includes("mov") ||
+                    uploadedFile.type.includes("video") ? (
+                    <Video className="size-12 text-red-500" />
+                  ) : (
+                    <File className="size-12 text-blue-500" />
+                  )}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <button
-                    onClick={() => removeFile(file.id)}
-                    className="p-1 hover:bg-gray-200 cursor-pointer rounded-full"
-                  >
-                    <X className="h-4 w-4 text-gray-500" />
-                  </button>
+                <div>
+                  <p className="text-sm font-medium">{uploadedFile.name}</p>
+                  <p className="text-xs text-gray-500">
+                    {formatFileSize(uploadedFile.size)}
+                  </p>
                 </div>
               </div>
-            ))}
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <button
+                  onClick={removeFile}
+                  className="p-1 hover:bg-gray-200 cursor-pointer rounded-full"
+                >
+                  <X className="h-4 w-4 text-gray-500" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

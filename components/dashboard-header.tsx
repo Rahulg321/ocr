@@ -39,7 +39,10 @@ export default function DashboardHeader({
           <span className="sr-only">Notifications</span>
         </Button>
         {showRunButton && (
-          <Button className="bg-figma-main text-white hover:bg-figma-main/80">
+          <Button
+            className="bg-figma-main cursor-pointer text-white hover:bg-figma-main/80 rounded-full"
+            size={"xl"}
+          >
             Run <Play />
           </Button>
         )}

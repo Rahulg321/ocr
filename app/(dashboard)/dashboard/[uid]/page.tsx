@@ -7,19 +7,39 @@ import DashboardHeader from "@/components/dashboard-header";
 import PdfViewer from "@/components/pdf-viewer";
 import { FaRegFilePdf, FaTrash } from "react-icons/fa6";
 import PageSettingsForm from "@/components/forms/PageSettingsForm";
+import { Button } from "@/components/ui/button";
+import { Download, Play } from "lucide-react";
 
 const page = () => {
   const pdfUrl = "/pdfs/sample-doc.pdf#toolbar=0&navpanes=0&scrollbar=0";
 
   return (
-    <section className=" ">
+    <section className="bg-muted p-4 md:p-6">
       <DashboardHeader title="Welcome, Raunak" showRunButton={true} />
 
-      <div className="flex-1 p-4 md:p-6">
-        <h2 className="text-xl font-semibold mb-4">Dashboard</h2>
+      <div className="flex-1 ">
+        <div className="flex items-center justify-between my-4 md:my-6">
+          <h2 className="text-xl font-semibold mb-4">Dashboard</h2>
+          <div className="flex items-center gap-2">
+            <Button
+              variant={"outline"}
+              className="cursor-pointer text-figma-main  rounded-full"
+              size={"lg"}
+            >
+              Customize <Download />
+            </Button>
+            <Button
+              className="bg-figma-main cursor-pointer text-white hover:bg-figma-main/80 rounded-full"
+              size={"lg"}
+            >
+              Download <Download />
+            </Button>
+          </div>
+        </div>
         <UploadedFileCard />
       </div>
-      <div className="flex gap-4 container px-4 md:px-6">
+
+      <div className="flex gap-4 container bg-white p-4 md:p-6 rounded-2xl mt-4">
         <div className="flex-1">
           <PdfViewer pdfUrl={pdfUrl} />
         </div>

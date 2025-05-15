@@ -2,8 +2,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileUpload } from "@/components/file-upload";
 import { SampleFiles } from "@/components/sample-files";
 import DashboardHeader from "@/components/dashboard-header";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const userSession = await auth();
+
+  if (!userSession) {
+    redirect("/sign-in");
+  }
+
+  const userId = userSession.user?.id;
+
   return (
     <div className="flex flex-col min-h-screen">
       <DashboardHeader title="Welcome, Raunak" showRunButton={true} />
@@ -13,10 +23,12 @@ export default function DashboardPage() {
 
         <Card className="mb-6">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-medium">Upload file</CardTitle>
+            <CardTitle className="text-base font-medium mt-4">
+              Upload file
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <FileUpload />
+          <CardContent className="p-4">
+            <FileUpload userId={userId!} />
           </CardContent>
         </Card>
 
