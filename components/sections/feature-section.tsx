@@ -29,6 +29,22 @@ export function FeatureSteps({
 }: FeatureStepsProps) {
   const [currentFeature, setCurrentFeature] = useState(0);
 
+  // Function to determine the color based on the step index
+  const getStepColor = (index: number) => {
+    if (index === 0) return "bg-primary text-primary-foreground";
+    if (index === 1) return "bg-orange-500 text-white";
+    if (index === 2) return "bg-purple-500 text-white";
+    return "bg-primary text-primary-foreground";
+  };
+
+  // Function to determine the text color based on the step index
+  const getTextColor = (index: number) => {
+    if (index === 0) return "text-figma-main";
+    if (index === 1) return "text-orange-500";
+    if (index === 2) return "text-purple-500";
+    return "text-figma-main";
+  };
+
   return (
     <div className={cn("p-8 md:p-12", className)}>
       <div className="max-w-7xl mx-auto w-full">
@@ -52,7 +68,7 @@ export function FeatureSteps({
                     className={cn(
                       "w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-sm",
                       index === currentFeature
-                        ? "bg-primary text-primary-foreground scale-110"
+                        ? getStepColor(index)
                         : "bg-muted text-muted-foreground"
                     )}
                   >
@@ -65,7 +81,7 @@ export function FeatureSteps({
                       className={cn(
                         "mb-2 flex items-center justify-center",
                         index === currentFeature
-                          ? "text-figma-main"
+                          ? getTextColor(index)
                           : "text-muted-foreground"
                       )}
                     >
@@ -76,7 +92,7 @@ export function FeatureSteps({
                     className={cn(
                       "text-xl md:text-2xl font-semibold",
                       index === currentFeature
-                        ? "text-figma-main"
+                        ? getTextColor(index)
                         : "text-foreground"
                     )}
                   >

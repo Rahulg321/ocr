@@ -30,8 +30,11 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         className={`${plusJakartaSans.variable} ${inter.variable} antialiased`}
       >
         <Card className="overflow-hidden min-h-screen">
-          <CardContent className="grid p-0 md:grid-cols-2">
-            <div className="relative hidden md:block h-screen">
+          <CardContent className="grid p-0 md:grid-cols-2 ">
+            <div
+              className="relative hidden md:block h-screen"
+              style={{ backgroundColor: "rgba(241, 247, 255, 1)" }}
+            >
               <div className="block-space big-container">
                 <div className="flex justify-center">
                   <Button variant={"outline"} className="">
@@ -40,7 +43,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
                 </div>
                 <h1 className="font-plus-jakarta-sans text-center mt-4">
                   Transform your Unstructured Data into
-                  <span className="text-blue-600">OCR</span>
+                  <span className="text-[#7B68EE] ml-2">OCR</span>
                 </h1>
                 <p className="text-center mt-4 text-[rgba(0, 0, 0, 0.70)]">
                   Vision Language Model (VLM) powered structuring that

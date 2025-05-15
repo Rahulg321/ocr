@@ -20,6 +20,7 @@ interface IndustryContent {
   icon: ReactElement;
   features: string[];
   imagePath: string;
+  imagePath2?: string;
 }
 
 const industryContents: Record<string, IndustryContent> = {
@@ -33,7 +34,7 @@ const industryContents: Record<string, IndustryContent> = {
       "Parse delivery receipts, barcodes, and handwritten notes",
       "Capture signatures and timestamps effortlessly",
     ],
-    imagePath: "/images/real-world-solutions.png",
+    imagePath: "/assets/finance.jpg",
   },
   Insurance: {
     title: "Insurance",
@@ -45,7 +46,8 @@ const industryContents: Record<string, IndustryContent> = {
       "Extract policy information accurately",
       "Process medical records and reports",
     ],
-    imagePath: "/images/real-world-solutions.png",
+    imagePath: "/assets/insurance.png",
+    imagePath2: "/assets/insurance.png",
   },
   Logistics: {
     title: "Logistics",
@@ -57,7 +59,8 @@ const industryContents: Record<string, IndustryContent> = {
       "Extract tracking information",
       "Digitize warehouse documentation",
     ],
-    imagePath: "/images/real-world-solutions.png",
+    imagePath: "/assets/logistics.png",
+    imagePath2: "/assets/logistics.png",
   },
   Research: {
     title: "Research",
@@ -69,10 +72,11 @@ const industryContents: Record<string, IndustryContent> = {
       "Process survey responses",
       "Analyze academic documents",
     ],
-    imagePath: "/images/real-world-solutions.png",
+    imagePath: "/assets/research.jpg",
+    imagePath2: "/assets/research.jpg",
   },
   Marketing: {
-    title: "Marketing",
+    title: "Marketing and Content Teams",
     description:
       "Convert marketing materials and analytics into actionable insights.",
     icon: <Target className="text-white" size={20} />,
@@ -81,10 +85,11 @@ const industryContents: Record<string, IndustryContent> = {
       "Extract metrics from analytics documents",
       "Digitize market research data",
     ],
-    imagePath: "/images/real-world-solutions.png",
+    imagePath: "/assets/marketing.png",
+    imagePath2: "/assets/marketing.png",
   },
-  Knowledge: {
-    title: "Knowledge",
+  Legal: {
+    title: "Legal",
     description:
       "Transform unstructured knowledge into searchable, structured content.",
     icon: <Brain className="text-white" size={20} />,
@@ -93,7 +98,8 @@ const industryContents: Record<string, IndustryContent> = {
       "Extract insights from technical papers",
       "Process training materials",
     ],
-    imagePath: "/images/real-world-solutions.png",
+    imagePath: "/assets/legal.png",
+    imagePath2: "/assets/legal.png",
   },
 };
 
@@ -108,7 +114,7 @@ export default function RealWorldSolutions() {
         <div className="bg-gray-100 text-gray-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
           Use case
         </div>
-        <h2 className="text-4xl font-bold text-gray-800 mb-4">
+        <h2 className=" font-bold text-gray-800 mb-4">
           Real-World Solutions, Powered by AI
         </h2>
         <p className="text-gray-600 max-w-2xl">
@@ -137,18 +143,16 @@ export default function RealWorldSolutions() {
         ))}
       </div>
 
-      {/* Content Section */}
-      <div className="bg-[#f8fafc] rounded-3xl overflow-hidden">
+      <div className="bg-[#f8fafc] rounded-3xl ">
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Left Content */}
           <div className="p-10 md:p-12 flex flex-col">
             <div className="flex flex-col">
               <div className="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center mb-6">
                 {currentContent.icon}
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">
+              <h2 className=" font-bold text-gray-800 mb-3">
                 {currentContent.title}
-              </h3>
+              </h2>
               <p className="text-gray-600 mb-8">{currentContent.description}</p>
               <ul className="space-y-4 mb-10">
                 {currentContent.features.map((feature, index) => (
@@ -188,18 +192,28 @@ export default function RealWorldSolutions() {
             </div>
           </div>
 
-          {/* Right Image */}
-          <div className="relative h-full min-h-[300px] md:min-h-[400px]">
-            <Image
-              src={currentContent.imagePath}
-              alt={`${currentContent.title} illustration`}
-              fill
-              className="object-cover"
-              style={{
-                clipPath: "inset(245px 0 0 522px)",
-                objectPosition: "center",
-              }}
-            />
+          <div className="mt-4 relative md:mt-10 p-6">
+            <div className="h-full rounded-2xl overflow-hidden">
+              <Image
+                src={currentContent.imagePath}
+                alt={`${currentContent.title} illustration`}
+                height={200}
+                width={200}
+                className="object-contain w-full  rounded-2xl"
+              />
+            </div>
+
+            {currentContent.imagePath2 && (
+              <div className="absolute bottom-8 right-8 shadow-lg rounded-xl overflow-hidden">
+                <Image
+                  src={currentContent.imagePath2}
+                  alt={`${currentContent.title} illustration`}
+                  height={200}
+                  width={200}
+                  className="object-contain w-full  rounded-2xl"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

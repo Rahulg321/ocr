@@ -183,7 +183,7 @@ export default function PricingSection() {
               >
                 <button
                   onClick={() => toggleQuestion(index)}
-                  className="flex justify-between items-center w-full px-6 py-4 text-left"
+                  className="flex justify-between items-center w-full px-6 cursor-pointer py-4 text-left"
                 >
                   <span className="font-medium">{faq.question}</span>
                   <div
