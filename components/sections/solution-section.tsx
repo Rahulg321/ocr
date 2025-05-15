@@ -89,7 +89,7 @@ export default function SolutionSection() {
   }, []);
 
   return (
-    <section className="relative w-full py-8 sm:py-12 md:py-16 lg:py-24 overflow-hidden bg-gradient-to-b from-white to-[#FFF5F9]">
+    <section className="relative w-full py-8 sm:py-12 md:py-16 lg:py-24 overflow-hidden bg-white">
       <div className="container mx-auto px-4 relative">
         <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 md:mb-16">
           Who Needs This Solution?

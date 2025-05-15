@@ -32,7 +32,7 @@ export default function HowHelpSection() {
               precision.
             </p>
             <div className="flex items-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full flex items-center justify-center mr-6">
+              <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mr-6">
                 <svg
                   width="32"
                   height="32"

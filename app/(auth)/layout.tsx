@@ -31,7 +31,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       >
         <Card className="overflow-hidden min-h-screen">
           <CardContent className="grid p-0 md:grid-cols-2">
-            <div className="relative hidden bg-[#F1F7FF] md:block h-screen">
+            <div className="relative hidden md:block h-screen">
               <div className="block-space big-container">
                 <div className="flex justify-center">
                   <Button variant={"outline"} className="">
@@ -40,9 +40,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
                 </div>
                 <h1 className="font-plus-jakarta-sans text-center mt-4">
                   Transform your Unstructured Data into
-                  <span className="bg-gradient-to-r from-[#757CFF] to-[#757CFF] bg-clip-text text-transparent  ">
-                    Actionable Insights
-                  </span>
+                  <span className="text-blue-600">OCR</span>
                 </h1>
                 <p className="text-center mt-4 text-[rgba(0, 0, 0, 0.70)]">
                   Vision Language Model (VLM) powered structuring that

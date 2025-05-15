@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 
 export default function ApiSection() {
   return (
-    <section className="relative w-full py-16 overflow-hidden bg-gradient-to-b from-white to-pink-50">
+    <section className="relative w-full py-16 overflow-hidden bg-white">
       <div className="container relative z-10 flex flex-col items-center justify-center px-4 mx-auto text-center">
         <Button variant={"outline"} className="text-purple-500">
           API integration
@@ -21,7 +21,7 @@ export default function ApiSection() {
 
         <Link
           href="#"
-          className="inline-flex items-center justify-center px-6 py-3 font-medium text-white transition-all rounded-full bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg hover:shadow-purple-200"
+          className="inline-flex items-center justify-center px-6 py-3 font-medium text-white transition-all rounded-full bg-blue-500 hover:shadow-lg hover:shadow-blue-200"
         >
           Join waitlist <ArrowRight className="w-4 h-4 ml-2" />
         </Link>

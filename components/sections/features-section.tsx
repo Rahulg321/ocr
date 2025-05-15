@@ -1,4 +1,127 @@
 import Image from "next/image";
+import VLMPDF from "@/public/assets/vlm-pdf.jpg";
+import VLMJPEG from "@/public/assets/vlm-jpeg.png";
+
+const JsonDisplay = () => {
+  return (
+    <div className="text-sm overflow-x-auto max-h-64 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+      <pre className="text-gray-800 leading-relaxed">
+        <code>
+          {`{
+  `}
+          <span className="text-red-500 font-semibold">&quot;user&quot;</span>
+          {`: {
+    `}
+          <span className="text-red-500 font-semibold">&quot;id&quot;</span>
+          {`: `}
+          <span className="text-green-600">101</span>
+          {`,
+    `}
+          <span className="text-red-500 font-semibold">&quot;name&quot;</span>
+          {`: `}
+          <span className="text-green-600">&quot;Raunak Sharma&quot;</span>
+          {`,
+    `}
+          <span className="text-red-500 font-semibold">&quot;email&quot;</span>
+          {`: `}
+          <span className="text-green-600">&quot;raunak@example.com&quot;</span>
+          {`,
+    `}
+          <span className="text-red-500 font-semibold">
+            &quot;isVerified&quot;
+          </span>
+          {`: `}
+          <span className="text-green-600">true</span>
+          {`,
+    `}
+          <span className="text-red-500 font-semibold">&quot;roles&quot;</span>
+          {`: [`}
+          <span className="text-green-600">&quot;designer&quot;</span>
+          {`, `}
+          <span className="text-green-600">&quot;developer&quot;</span>
+          {`, `}
+          <span className="text-green-600">&quot;founder&quot;</span>
+          {`]
+  },
+  `}
+          <span className="text-red-500 font-semibold">
+            &quot;projects&quot;
+          </span>
+          {`: [
+    {
+      `}
+          <span className="text-red-500 font-semibold">&quot;id&quot;</span>
+          {`: `}
+          <span className="text-green-600">&quot;p001&quot;</span>
+          {`,
+      `}
+          <span className="text-red-500 font-semibold">&quot;title&quot;</span>
+          {`: `}
+          <span className="text-green-600">
+            &quot;Smart Kitchen Website&quot;
+          </span>
+          {`
+    }
+  ]
+}`}
+        </code>
+      </pre>
+    </div>
+  );
+};
+
+const VLMFlowDiagram = () => (
+  <div className="flex flex-col items-center justify-center h-full min-h-[400px] px-2">
+    {/* Top PDF */}
+    <div className="flex flex-col items-center">
+      <div className="bg-white rounded shadow p-1 mb-1">
+        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+          PDF
+        </span>
+      </div>
+      <div className="h-8 w-0.5 bg-gray-300 mb-1" />
+    </div>
+    {/* Top JPEG */}
+    <div className="flex flex-col items-center">
+      <div className="bg-white rounded shadow p-1 mb-1">
+        <span className="bg-orange-400 text-white text-xs font-bold px-2 py-1 rounded">
+          JPEG
+        </span>
+      </div>
+      <div className="h-8 w-0.5 bg-gray-300 mb-1" />
+    </div>
+    {/* Center AI Agent */}
+    <div className="flex flex-col items-center mb-1">
+      <div className="bg-gradient-to-br from-indigo-400 to-blue-500 rounded-full w-16 h-16 flex items-center justify-center shadow-lg mb-2">
+        <svg width="32" height="32" fill="none" viewBox="0 0 32 32">
+          <circle cx="16" cy="16" r="14" stroke="#fff" strokeWidth="2" />
+          <rect x="14" y="10" width="4" height="12" rx="2" fill="#fff" />
+        </svg>
+      </div>
+      <div className="bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1 rounded mb-2 shadow">
+        VLM Powered
+        <br />
+        AI-Agent
+      </div>
+    </div>
+    <div className="h-8 w-0.5 bg-gray-300 mb-1" />
+    <div className="flex flex-col items-center">
+      <div className="bg-white rounded shadow p-1 mb-1">
+        <span className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+          MD
+        </span>
+      </div>
+      <div className="h-8 w-0.5 bg-gray-300 mb-1" />
+    </div>
+    <div className="flex flex-col items-center">
+      <div className="bg-white rounded shadow p-1">
+        <span className="bg-yellow-400 text-white text-xs font-bold px-2 py-1 rounded">
+          JSON
+        </span>
+      </div>
+    </div>
+  </div>
+);
 
 export default function FeaturesSection() {
   return (
@@ -27,38 +150,26 @@ export default function FeaturesSection() {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100">
+                  <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 relative aspect-square">
                     <Image
-                      src="/placeholder.svg?height=200&width=400"
-                      width={400}
-                      height={200}
+                      src={VLMPDF.src}
+                      fill
                       alt="Scientific document with charts"
-                      className="w-full rounded"
+                      className="w-full h-auto  object-contain rounded"
                     />
                   </div>
-                  <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100">
+                  <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100 relative aspect-square">
                     <Image
-                      src="/placeholder.svg?height=200&width=400"
-                      width={400}
-                      height={200}
+                      src={VLMJPEG.src}
+                      fill
                       alt="Document with tables and images"
-                      className="w-full rounded"
+                      className="w-full h-auto  object-contain rounded"
                     />
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Center - Conversion process */}
-            <div className="flex flex-col items-center">
-              <div className="hidden lg:block w-24 h-0.5 bg-gradient-to-r from-rose-200 to-indigo-200 my-4"></div>
-              <div className="bg-indigo-100 text-indigo-600 px-4 py-3 rounded-full font-medium shadow-sm">
-                Real-time
-                <br />
-                Conversion
-              </div>
-              <div className="hidden lg:block w-24 h-0.5 bg-gradient-to-r from-indigo-200 to-amber-200 my-4"></div>
-            </div>
+            <VLMFlowDiagram />
 
             {/* Right side - Output formats */}
             <div className="w-full lg:w-5/12 space-y-6">
@@ -119,23 +230,7 @@ export default function FeaturesSection() {
                   </div>
                 </div>
                 <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
-                  <pre className="text-xs text-gray-800 overflow-x-auto">
-                    {`{
-  "user": {
-    "id": 101,
-    "name": "Raunak Sharma",
-    "email": "raunak@example.com",
-    "isVerified": true,
-    "roles": ["designer", "developer", "founder"]
-  },
-  "projects": [
-    {
-      "id": "p001",
-      "title": "Smart Kitchen Website"
-    }
-  ]
-}`}
-                  </pre>
+                  <JsonDisplay />
                 </div>
               </div>
             </div>

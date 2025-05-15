@@ -25,15 +25,6 @@ export default function FileUploadSection() {
             </div>
           </div>
         </div>
-
-        {/* Gradient background effect */}
-        <div
-          className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none"
-          aria-hidden="true"
-        >
-          <div className="absolute -left-10 -bottom-20 w-80 h-80 bg-purple-200 rounded-full opacity-30 blur-3xl"></div>
-          <div className="absolute -right-10 -bottom-20 w-80 h-80 bg-pink-200 rounded-full opacity-30 blur-3xl"></div>
-        </div>
       </div>
     </div>
   );

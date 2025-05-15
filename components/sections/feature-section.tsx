@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -10,38 +10,24 @@ interface Feature {
   title?: string;
   content: string;
   image: string;
+  icon?: React.ReactNode;
 }
 
 interface FeatureStepsProps {
   features: Feature[];
   className?: string;
   title?: string;
-  autoPlayInterval?: number;
   imageHeight?: string;
+  autoPlayInterval?: number;
 }
 
 export function FeatureSteps({
   features,
   className,
-  title = "How to get Started",
-  autoPlayInterval = 3000,
+  title = "How it Works",
   imageHeight = "h-[400px]",
 }: FeatureStepsProps) {
   const [currentFeature, setCurrentFeature] = useState(0);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (progress < 100) {
-        setProgress((prev) => prev + 100 / (autoPlayInterval / 100));
-      } else {
-        setCurrentFeature((prev) => (prev + 1) % features.length);
-        setProgress(0);
-      }
-    }, 100);
-
-    return () => clearInterval(timer);
-  }, [progress, features.length, autoPlayInterval]);
 
   return (
     <div className={cn("p-8 md:p-12", className)}>
@@ -51,32 +37,49 @@ export function FeatureSteps({
         </h2>
 
         <div className="flex flex-col md:grid md:grid-cols-2 gap-6 md:gap-10">
-          <div className="order-2 md:order-1 space-y-8">
+          <div className="order-2 md:order-1 space-y-16">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                className="flex items-center gap-6 md:gap-8"
-                initial={{ opacity: 0.3 }}
-                animate={{ opacity: index === currentFeature ? 1 : 0.3 }}
-                transition={{ duration: 0.5 }}
+                className={cn(
+                  "flex items-start gap-6 md:gap-8 cursor-pointer relative p-4 rounded-lg transition-all duration-300"
+                )}
+                onClick={() => setCurrentFeature(index)}
+                transition={{ duration: 0.3 }}
               >
-                <motion.div
-                  className={cn(
-                    "w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2",
-                    index === currentFeature
-                      ? "bg-primary border-primary text-primary-foreground scale-110"
-                      : "bg-muted border-muted-foreground"
-                  )}
-                >
-                  {index <= currentFeature ? (
-                    <span className="text-lg font-bold">✓</span>
-                  ) : (
+                <div className="flex flex-col items-center">
+                  <motion.div
+                    className={cn(
+                      "w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-sm",
+                      index === currentFeature
+                        ? "bg-primary text-primary-foreground scale-110"
+                        : "bg-muted text-muted-foreground"
+                    )}
+                  >
                     <span className="text-lg font-semibold">{index + 1}</span>
+                  </motion.div>
+                </div>
+                <div className="flex-1 flex flex-col items-start">
+                  {feature.icon && (
+                    <div
+                      className={cn(
+                        "mb-2 flex items-center justify-center",
+                        index === currentFeature
+                          ? "text-figma-main"
+                          : "text-muted-foreground"
+                      )}
+                    >
+                      {feature.icon}
+                    </div>
                   )}
-                </motion.div>
-
-                <div className="flex-1">
-                  <h3 className="text-xl md:text-2xl font-semibold">
+                  <h3
+                    className={cn(
+                      "text-xl md:text-2xl font-semibold",
+                      index === currentFeature
+                        ? "text-figma-main"
+                        : "text-foreground"
+                    )}
+                  >
                     {feature.title || feature.step}
                   </h3>
                   <p className="text-sm md:text-lg text-muted-foreground">
@@ -107,11 +110,10 @@ export function FeatureSteps({
                       <Image
                         src={feature.image}
                         alt={feature.step}
-                        className="w-full h-full object-cover transition-transform transform"
+                        className="w-full h-full object-contain transition-transform transform bg-white"
                         width={1000}
                         height={500}
                       />
-                      <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-background via-background/50 to-transparent" />
                     </motion.div>
                   )
               )}
