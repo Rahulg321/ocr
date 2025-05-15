@@ -14,7 +14,8 @@ export const getUserByEmail = async (email: string) => {
       },
     });
     return user;
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error in getUserByEmail", error);
     return null;
   }
 };
@@ -32,7 +33,8 @@ export const getUserById = async (userId: string) => {
       },
     });
     return user;
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error in getUserById", error);
     return null;
   }
 };
@@ -50,7 +52,7 @@ export const getAccountByUserId = async (userId: string) => {
       },
     });
     return userAccount;
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof Error) {
       console.error("Error in getAccountByUserId", error);
     }
@@ -87,6 +89,9 @@ export const getPasswordResetTokenByToken = async (token: string) => {
         token: token,
       },
     });
+
+    console.log("returned token", returnedToken);
+
     return returnedToken;
   } catch (error) {
     console.log("prisma error occured", error);

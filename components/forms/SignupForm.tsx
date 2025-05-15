@@ -59,8 +59,17 @@ const SignupForm = () => {
   }
   return (
     <div>
+      <SigninGoogle />
+      <div className="my-4 flex items-center">
+        <div className="flex-grow border-t border-gray-300" />
+        <span className="mx-4 text-gray-500">or</span>
+        <div className="flex-grow border-t border-gray-300" />
+      </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-2 md:space-y-4"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -127,17 +136,15 @@ const SignupForm = () => {
           </ul>
           {error && <ErrorCard urlError={error} />}
           {success && <SuccessCard success={success} />}
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-full bg-figma-main hover:bg-figma-main/80 cursor-pointer"
+            disabled={isPending}
+          >
             {isPending ? "Creating User..." : "Sign up"}
           </Button>
         </form>
       </Form>
-      <div className="my-4 flex items-center">
-        <div className="flex-grow border-t border-gray-300" />
-        <span className="mx-4 text-gray-500">or</span>
-        <div className="flex-grow border-t border-gray-300" />
-      </div>
-      <SigninGoogle />
     </div>
   );
 };

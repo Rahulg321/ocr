@@ -78,6 +78,12 @@ const LoginForm = () => {
 
   return (
     <div>
+      <SigninGoogle />
+      <div className="flex items-center">
+        <div className="flex-grow border-t border-gray-300" />
+        <span className="mx-4 text-gray-500">or</span>
+        <div className="flex-grow border-t border-gray-300" />
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {show2fa && (
@@ -128,22 +134,23 @@ const LoginForm = () => {
             </React.Fragment>
           )}
 
-          <Link href={"/auth/reset"} className="mt-4 px-0 hover:underline">
+          <Link
+            href={"/auth/reset"}
+            className="mt-4 px-0 text-sm hover:underline"
+          >
             Forgot Password
           </Link>
-          {/* <div className="flex items-center space-x-2">
-            <Checkbox id="terms" />
-            <label
-              htmlFor="terms"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Keep me logged in
-            </label>
-          </div> */}
-          {success && <SuccessCard success={success} />}
-          {error && <ErrorCard urlError={error} />}
 
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <div className="mt-4">
+            {success && <SuccessCard success={success} />}
+            {error && <ErrorCard urlError={error} />}
+          </div>
+
+          <Button
+            type="submit"
+            className="w-full bg-figma-main hover:bg-figma-main/80 cursor-pointer"
+            disabled={isPending}
+          >
             {isPending ? "Logging in..." : show2fa ? "Confirm" : "Log in"}
           </Button>
         </form>
@@ -151,12 +158,6 @@ const LoginForm = () => {
       <div className="mt-4">
         <ErrorCard urlError={urlError} />
       </div>
-      <div className="flex items-center">
-        <div className="flex-grow border-t border-gray-300" />
-        <span className="mx-4 text-gray-500">or</span>
-        <div className="flex-grow border-t border-gray-300" />
-      </div>
-      <SigninGoogle />
     </div>
   );
 };

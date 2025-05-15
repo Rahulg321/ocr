@@ -31,10 +31,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     error: "/auth/error",
   },
   events: {
-    //this event is only triggered when we use an OAuth provider
     async linkAccount({ user }) {
-      console.log("oauth triggered from auth events");
-
       await db.user.update({
         where: {
           id: user.id,
@@ -43,8 +40,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           emailVerified: new Date(),
         },
       });
-
-      console.log("added 7 days to trial period");
     },
   },
   callbacks: {

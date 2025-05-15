@@ -40,11 +40,11 @@ const layout = ({ children }: { children: React.ReactNode }) => {
                 </div>
                 <h1 className="font-plus-jakarta-sans text-center mt-4">
                   Transform your Unstructured Data into
-                  <span className="text-[#757CFF] ml-2">
+                  <span className="bg-gradient-to-r from-[#757CFF] to-[#757CFF] bg-clip-text text-transparent  ">
                     Actionable Insights
                   </span>
                 </h1>
-                <p className="text-center">
+                <p className="text-center mt-4 text-[rgba(0, 0, 0, 0.70)]">
                   Vision Language Model (VLM) powered structuring that
                   simplifies your data, saves time, and boosts efficiency.
                 </p>
