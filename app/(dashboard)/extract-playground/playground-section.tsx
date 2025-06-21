@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -19,37 +19,23 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Download, AlertTriangle, Info, X, Zap } from "lucide-react";
 import SchemaEditor, { type SchemaField } from "./schema-editor";
+import { toast } from "sonner";
+import axios from "axios";
 
 export default function PlaygroundPage() {
-  const [urls, setUrls] = useState<string[]>(["https://darkalphacapita.com"]);
-  const [newUrl, setNewUrl] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  const [url, setUrl] = useState<string>("https://darkalphacapita.com");
   const [schema, setSchema] = useState<SchemaField[]>([
     { id: "1", name: "email", type: "String", isOptional: false },
-    {
-      id: "2",
-      name: "team members",
-      type: "Array",
-      arrayItemType: "String",
-      isOptional: false,
-    },
-    { id: "3", name: "phone number", type: "String", isOptional: true },
+    { id: "2", name: "phone number", type: "String", isOptional: true },
   ]);
   const [promptText, setPromptText] = useState(
     "i need to extract key details about the company and its team members and their contact information"
   );
   const [isJsonView, setIsJsonView] = useState(false);
   const [jsonOutput, setJsonOutput] = useState("");
-
-  const handleAddUrl = () => {
-    if (newUrl.trim() !== "" && !urls.includes(newUrl.trim())) {
-      setUrls([...urls, newUrl.trim()]);
-      setNewUrl("");
-    }
-  };
-
-  const handleRemoveUrl = (urlToRemove: string) => {
-    setUrls(urls.filter((url) => url !== urlToRemove));
-  };
+  const [extractionResult, setExtractionResult] = useState<any>(null);
 
   useEffect(() => {
     if (isJsonView) {
@@ -60,6 +46,49 @@ export default function PlaygroundPage() {
       setJsonOutput(JSON.stringify(simplifiedSchema, null, 2));
     }
   }, [schema, isJsonView]);
+
+  const handleRunClick = () => {
+    startTransition(async () => {
+      setExtractionResult(null);
+      console.log("schema", schema);
+
+      const schemaObject = schema.reduce(
+        (acc, field) => {
+          acc[field.name] = { type: field.type.toLowerCase() };
+          return acc;
+        },
+        {} as Record<string, { type: string }>
+      );
+
+      try {
+        const response = await axios.post(
+          "https://app.extractr.ai/api/extract-schema", // endpoint
+          {
+            url: url,
+            schema: {
+              type: "object",
+              properties: schemaObject,
+            },
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-API-Key": "test-key",
+            },
+          } // Axios config
+        );
+
+        console.log("Schema extraction result:", response.data);
+        //@ts-ignore
+        setExtractionResult(response.data?.extractedData);
+
+        toast.success("Schema extracted successfully");
+      } catch (err) {
+        console.error("Error:", err);
+        toast.error("Error extracting schema");
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen ">
@@ -73,47 +102,26 @@ export default function PlaygroundPage() {
               <Zap className="w-4 h-4 mr-2" />
               Integrate Now
             </Button>
-            <Button className="bg-orange-500 text-white hover:bg-orange-600">
-              Run
+            <Button
+              className="bg-orange-500 text-white hover:bg-orange-600"
+              onClick={handleRunClick}
+              disabled={isPending}
+            >
+              {isPending ? "Running..." : "Run"}
             </Button>
           </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div className="md:col-span-2">
-            <Label className="text-xs font-medium text-gray-700">URLs</Label>
-            <div className="mt-1 flex flex-wrap gap-2 items-center">
-              {urls.map((url) => (
-                <div
-                  key={url}
-                  className="flex items-center bg-gray-100 border border-gray-300 rounded-md px-2 py-1 text-sm"
-                >
-                  <span>{url}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="ml-1 p-0 h-auto hover:bg-gray-200"
-                    onClick={() => handleRemoveUrl(url)}
-                  >
-                    <X className="w-3 h-3 text-gray-500" />
-                  </Button>
-                </div>
-              ))}
-              <Input
-                type="text"
-                value={newUrl}
-                onChange={(e) => setNewUrl(e.target.value)}
-                placeholder="https://example.com"
-                className="flex-grow min-w-[150px] h-8"
-              />
-              <Button
-                variant="outline"
-                onClick={handleAddUrl}
-                className="h-8 text-sm bg-white"
-              >
-                Add another URL
-              </Button>
-            </div>
+            <Label className="text-xs font-medium text-gray-700">URL</Label>
+            <Input
+              type="text"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://example.com"
+              className="mt-1"
+            />
             <p className="text-xs text-gray-500 mt-1">
               Add /* to the URL (e.g. firecrawl.dev/*) to find and extract
               information across the entire website.
@@ -213,7 +221,18 @@ export default function PlaygroundPage() {
 
         <Separator className="my-6" />
 
-        <footer className="flex flex-col sm:flex-row justify-between items-center">
+        {extractionResult && (
+          <div>
+            <Label className="text-lg font-semibold mb-2 block">Result</Label>
+            <ScrollArea className="h-[400px] w-full border rounded-md bg-gray-50 p-4">
+              <pre className="text-sm whitespace-pre-wrap break-all">
+                {JSON.stringify(extractionResult, null, 2)}
+              </pre>
+            </ScrollArea>
+          </div>
+        )}
+
+        <footer className="mt-6 flex flex-col sm:flex-row justify-between items-center">
           <Button
             variant="ghost"
             size="sm"
