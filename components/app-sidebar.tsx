@@ -2,7 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart2, ChevronUp, Clock, Settings, User2 } from "lucide-react";
+import {
+  BarChart2,
+  ChevronUp,
+  Clock,
+  Settings,
+  User2,
+  File,
+  Activity,
+  FileText,
+  Play,
+  ChevronDown,
+  Home,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -18,14 +30,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
 import SignOutDialog from "./dialogs/SignOutDialog";
 
 const navigationItems = [
+  {
+    title: "Overview",
+    href: "/overview",
+    icon: Home,
+  },
+
   {
     title: "Dashboard",
     href: "/dashboard",
@@ -35,6 +50,30 @@ const navigationItems = [
     title: "History",
     href: "/history",
     icon: Clock,
+  },
+
+  {
+    title: "Playground",
+    href: "/playground",
+    icon: Play,
+  },
+
+  {
+    title: "Extract",
+    href: "/extract",
+    icon: FileText,
+  },
+
+  {
+    title: "Activity Log",
+    href: "/activity-log",
+    icon: Activity,
+  },
+
+  {
+    title: "Usage",
+    href: "/usage",
+    icon: BarChart2,
   },
   {
     title: "Settings",
@@ -47,9 +86,28 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar className="border-r">
-      <SidebarHeader className="px-4 py-6">
-        <div className="text-sm font-medium">Menu</div>
+    <Sidebar variant="inset" className="">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton>
+                  Select Workspace
+                  <ChevronDown className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
+                <DropdownMenuItem>
+                  <span>Acme Inc</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <span>Acme Corp.</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>

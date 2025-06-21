@@ -26,6 +26,7 @@ export default function DashboardHeader({
     <div className="flex items-center justify-between border-b p-4">
       <div className="flex items-center gap-4">
         <SidebarTrigger className="md:hidden" />
+
         <div>
           <h1 className="text-xl font-semibold md:text-2xl">{title}</h1>
           <p className="text-xs text-muted-foreground md:text-sm">

@@ -32,6 +32,7 @@ model User {
 
     // one to one relation between user and two factor confirmation
     TwoFactorConfirmation TwoFactorConfirmation?
+    Document              Document[]
 }
 
 model Profile {
@@ -95,4 +96,24 @@ model TwoFactorToken {
     expires DateTime
 
     @@unique([email, token])
+}
+
+model Document {
+    id           String   @id @default(cuid())
+    user         User     @relation(fields: [userId], references: [id])
+    userId       String
+    fileUrl      String
+    fileName     String
+    status       Status   @default(PENDING)
+    markdown     String?
+    errorMessage String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
+
+enum Status {
+    PENDING
+    PROCESSING
+    COMPLETED
+    FAILED
 }

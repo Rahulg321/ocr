@@ -1,13 +1,28 @@
-"use server";
-
+import { auth } from "@/auth";
+import db from "@/lib/db";
+import { redisClient } from "@/lib/redis";
 import { revalidatePath } from "next/cache";
-import db from "../db";
-import { redisClient } from "../redis";
+import { NextRequest, NextResponse } from "next/server";
 
-const UploadDocuments = async (formData: FormData, userId: string) => {
+export async function POST(request: NextRequest) {
+  console.log("upload file route called");
+
+  const userSession = await auth();
+
+  if (!userSession?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!redisClient.isOpen) {
+    console.log("redis client not connected, connecting...");
+
+    await redisClient.connect();
+  }
+
+  const userId = userSession.user.id;
+
   try {
-    console.log("Values in profile pic server action");
-
+    const formData = await request.formData();
     const file = formData.get("file") as File;
     const fileName = formData.get("fileName") as string;
 
@@ -35,30 +50,27 @@ const UploadDocuments = async (formData: FormData, userId: string) => {
 
     console.log("upload response", response.body, response.blob);
 
-    // https://${storageAccountName}.blob.core.windows.net/${containerName}/${name}
-
     const fileUrl = `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${process.env.AZURE_STORAGE_CONTAINER_NAME}/${fileName}`;
 
     console.log("file url generated from azure is", fileUrl);
 
     const uploadedDocument = await db.document.create({
       data: {
-        status: "PENDING",
         fileUrl: fileUrl,
         fileName: fileName,
-        userId: userId,
+        userId: userId!,
       },
     });
 
     console.log("document created");
 
-    await redisClient.lpush(
+    await redisClient.lPush(
       "documentQueue",
       JSON.stringify({
         documentId: uploadedDocument.id,
         fileUrl: fileUrl,
         fileName: fileName,
-        userId: userId,
+        userId: userId!,
       })
     );
 
@@ -66,18 +78,16 @@ const UploadDocuments = async (formData: FormData, userId: string) => {
 
     revalidatePath(`/dashboard`);
 
-    return {
+    return NextResponse.json({
       success: true,
-      message: "Successfully Uploaded file",
-      fileUrl,
-    };
+      fileUrl: fileUrl,
+      documentId: uploadedDocument.id,
+    });
   } catch (error) {
-    console.error("An error occured", error);
-    return {
-      success: false,
-      message: `An error occured ${error}`,
-    };
+    console.error("error uploading file", error);
+    return NextResponse.json(
+      { error: "Failed to upload file" },
+      { status: 500 }
+    );
   }
-};
-
-export default UploadDocuments;
+}

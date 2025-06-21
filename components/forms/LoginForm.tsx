@@ -127,19 +127,20 @@ const LoginForm = () => {
                     <FormControl>
                       <PasswordInput placeholder="*********" {...field} />
                     </FormControl>
+                    <div className="text-right">
+                      <Link
+                        href={"/auth/reset"}
+                        className="mt-4 px-0 text-sm hover:underline text-blue-500"
+                      >
+                        Forgot Password?
+                      </Link>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </React.Fragment>
           )}
-
-          <Link
-            href={"/auth/reset"}
-            className="mt-4 px-0 text-sm hover:underline"
-          >
-            Forgot Password
-          </Link>
 
           <div className="mt-4">
             {success && <SuccessCard success={success} />}

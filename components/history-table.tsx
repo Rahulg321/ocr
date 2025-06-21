@@ -46,90 +46,6 @@ export type FileHistory = {
   action: "Download" | "Retry";
 };
 
-// Sample data
-const data: FileHistory[] = [
-  {
-    id: "1",
-    fileName: "Research-paper.pdf",
-    dateTime: "23:45, 30 Apr, 25",
-    processingTime: "10.56 sec",
-    fileType: "PDF",
-    fileSize: "50 KB",
-    status: "Successful",
-    action: "Download",
-  },
-  {
-    id: "2",
-    fileName: "Research-paper.pdf",
-    dateTime: "00:45, 29 Apr, 25",
-    processingTime: "37.96 sec",
-    fileType: "PDF",
-    fileSize: "331 KB",
-    status: "Unsuccessful",
-    action: "Retry",
-  },
-  {
-    id: "3",
-    fileName: "Research-LOREMEPS...",
-    dateTime: "00:45, 29 Apr, 25",
-    processingTime: "10.56 sec",
-    fileType: "XLS",
-    fileSize: "20 MB",
-    status: "Successful",
-    action: "Download",
-  },
-  {
-    id: "4",
-    fileName: "t123.pdf",
-    dateTime: "00:45, 29 Apr, 25",
-    processingTime: "2 sec",
-    fileType: "PDF",
-    fileSize: "2 KB",
-    status: "Successful",
-    action: "Download",
-  },
-  {
-    id: "5",
-    fileName: "Exam.doc",
-    dateTime: "00:45, 29 Apr, 25",
-    processingTime: "1 min 2 sec",
-    fileType: "DOC",
-    fileSize: "2 MB",
-    status: "Unsuccessful",
-    action: "Retry",
-  },
-  {
-    id: "6",
-    fileName: "Example.doc",
-    dateTime: "00:45, 29 Apr, 25",
-    processingTime: "10.56 sec",
-    fileType: "DOC",
-    fileSize: "1.2 MB",
-    status: "Unsuccessful",
-    action: "Retry",
-  },
-  {
-    id: "7",
-    fileName: "demand.xls",
-    dateTime: "00:45, 29 Apr, 25",
-    processingTime: "6.9 sec",
-    fileType: "XLS",
-    fileSize: "10 MB",
-    status: "Successful",
-    action: "Download",
-  },
-  {
-    id: "8",
-    fileName: "lit.xls",
-    dateTime: "00:45, 29 Apr, 25",
-    processingTime: "10.56 sec",
-    fileType: "XLS",
-    fileSize: "10 MB",
-    status: "Successful",
-    action: "Download",
-  },
-];
-
 // Helper function to get file type badge color
 const getFileTypeBadgeColor = (fileType: string) => {
   switch (fileType) {
@@ -176,7 +92,7 @@ const getActionButtonColor = (action: string) => {
   }
 };
 
-export function HistoryTable() {
+export function HistoryTable({ data }: { data: FileHistory[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

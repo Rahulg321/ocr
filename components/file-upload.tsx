@@ -13,6 +13,7 @@ import {
   WholeWordIcon,
   Music,
   Video,
+  ExternalLinkIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -21,8 +22,11 @@ import {
   BsFiletypePptx,
   BsFiletypeDocx,
   BsFileEarmarkExcelFill,
+  BsFiletypePdf,
 } from "react-icons/bs";
 import UploadDocuments from "@/lib/actions/upload-documents";
+import axios from "axios";
+import Link from "next/link";
 
 type UploadedFile = {
   id: string;
@@ -49,6 +53,8 @@ export function FileUpload({ userId }: FileUploadProps) {
     success?: string;
     error?: string;
   }>({});
+
+  const [documentId, setDocumentId] = React.useState<string | null>(null);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -110,9 +116,17 @@ export function FileUpload({ userId }: FileUploadProps) {
       setUploadProgress(30);
 
       // Call API to upload file
-      const response = await UploadDocuments(formData, userId);
+      // const response = await UploadDocuments(formData, userId);
+      const response: any = await axios.post("/api/upload-file", formData);
 
-      if (response.success) {
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // const response = {
+      //   success: true,
+      //   fileUrl: "https://example.com/file.pdf",
+      // };
+
+      if (response.status === 200) {
         // Complete progress
         setUploadProgress(100);
 
@@ -123,8 +137,10 @@ export function FileUpload({ userId }: FileUploadProps) {
           name: file.name,
           size: file.size,
           type: file.type,
-          url: response.imageUrl || URL.createObjectURL(file),
+          url: response.data.fileUrl! || URL.createObjectURL(file),
         });
+
+        setDocumentId(response.data.documentId);
 
         setUploadStatus({
           success: `File uploaded successfully: ${file.name}`,
@@ -132,7 +148,7 @@ export function FileUpload({ userId }: FileUploadProps) {
         });
       } else {
         setUploadStatus({
-          error: response.message || "Server Side Error Occurred",
+          error: "Server Side Error Occurred",
           success: undefined,
         });
       }
@@ -204,7 +220,6 @@ export function FileUpload({ userId }: FileUploadProps) {
         </div>
       </div>
 
-      {/* Status Messages */}
       {uploadStatus.success && (
         <div className="bg-green-50 p-3 rounded-md border border-green-200 text-green-800">
           {uploadStatus.success}
@@ -217,7 +232,6 @@ export function FileUpload({ userId }: FileUploadProps) {
         </div>
       )}
 
-      {/* Upload Progress Section */}
       {isUploading && (
         <div className="space-y-3">
           <h3 className="text-sm font-medium">Uploading...</h3>
@@ -231,16 +245,20 @@ export function FileUpload({ userId }: FileUploadProps) {
         </div>
       )}
 
-      {/* Uploaded File */}
       {uploadedFile && (
         <div className="space-y-3">
           <h3 className="text-sm font-medium">Uploaded File</h3>
+          <Button asChild>
+            <Link href={`/dashboard/${documentId}`}>
+              <ExternalLinkIcon className="size-4" /> View Processing Results
+            </Link>
+          </Button>
           <div className="space-y-2">
             <div className="flex items-center justify-between p-3 border rounded-md bg-gray-50">
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-white rounded-md border">
                   {uploadedFile.type.includes("pdf") ? (
-                    <BsFiletypeDocx className="size-12 text-blue-500" />
+                    <BsFiletypePdf className="size-12 text-blue-500" />
                   ) : uploadedFile.type.includes("word") ||
                     uploadedFile.type.includes("doc") ? (
                     <BsFiletypeDocx className="size-12 text-blue-500" />

@@ -4,6 +4,7 @@ import "../globals.css";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import SidebarHeader from "./sidebar-header";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -32,7 +33,12 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <AppSidebar />
-          <SidebarInset>{children}</SidebarInset>
+          <SidebarInset>
+            <div className="flex flex-col h-full">
+              <SidebarHeader />
+              <main className="p-4 md:p-6">{children}</main>
+            </div>
+          </SidebarInset>
         </SidebarProvider>
         <Toaster />
       </body>

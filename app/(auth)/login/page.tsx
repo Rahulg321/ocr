@@ -1,27 +1,57 @@
 import React, { Suspense } from "react";
 import LoginForm from "@/components/forms/LoginForm";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import SignupForm from "@/components/forms/SignupForm";
+
 const LoginPage = () => {
   return (
-    <section className="block-space narrow-container">
-      <h2 className="text-center">Welcome Back!</h2>
-      <p className="text-center text-gray-500 my-4">
-        Enter your personal data to create your account{" "}
-      </p>
-      <div className="my-4 md:my-6">
-        <Suspense fallback={<div>Loading...</div>}>
-          <LoginForm />
-        </Suspense>
-      </div>
-      <div className="mt-4 text-center">
-        <p>
-          Need an account?
-          <Link href="/signup" className="ml-1 text-blue-500 underline">
-            Create one
-          </Link>
-        </p>
-      </div>
-    </section>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <Tabs defaultValue="login" className="w-[450px]">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="login">Login</TabsTrigger>
+          <TabsTrigger value="signup">Sign Up</TabsTrigger>
+        </TabsList>
+        <TabsContent value="login">
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle>Welcome Back!</CardTitle>
+              <CardDescription>
+                Enter your credentials to log in to your account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Suspense fallback={<div>Loading...</div>}>
+                <LoginForm />
+              </Suspense>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="signup">
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle>Create an account</CardTitle>
+              <CardDescription>
+                Enter your details to create your new account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Suspense fallback={<div>Loading...</div>}>
+                <SignupForm />
+              </Suspense>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 
